@@ -55,7 +55,7 @@ const googleCallback = (req, res, next) => {
       token,
     });
 
-    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+    res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${token}?user=${user}`);
   })(req, res, next);
 };
 
