@@ -67,10 +67,15 @@ const googleCallback = (req, res, next) => {
 
     const token = user.createJWT();
 
-    res.cookie("userToken", token);
+    res.cookie("userToken", token, {
+      httpOnly: false,
+      secure: true,
+      sameSite: 'none'
+    });
 
     res.cookie("userInfo", JSON.stringify({ name: user.name, role: user.role }), {
       secure: true,
+      httpOnly: false,
       domain: '.learnqubeapi.onrender.com',
       sameSite: 'none'
     });

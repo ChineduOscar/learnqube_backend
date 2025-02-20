@@ -10,7 +10,7 @@ import rateLimiter from 'express-rate-limit';
 
 // session
 import session from 'express-session';
-import cookieParser from 'cookie-parser';
+import cookie from 'cookie';
 
 // passport
 import passport from 'passport';
