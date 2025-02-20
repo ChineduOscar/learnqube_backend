@@ -47,9 +47,15 @@ const googleCallback = (req, res, next) => {
 
     const token = user.createJWT();
 
-    res.status(StatusCodes.OK)
+    res.status(StatusCodes.OK).json({
+      user: {
+        name: user.name,
+        role: user.role,
+      },
+      token,
+    });
 
-    res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${token}?user=${user}`);
+    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   })(req, res, next);
 };
 
