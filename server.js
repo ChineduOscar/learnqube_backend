@@ -10,7 +10,6 @@ import rateLimiter from 'express-rate-limit';
 
 // session
 import session from 'express-session';
-import cookie from 'cookie';
 
 // passport
 import passport from 'passport';
@@ -44,9 +43,9 @@ app.use(cors(
   {
     origin: 'http://localhost:3000',
     optionsSuccessStatus:2,
+    credentials: true
   }
 ));
-app.use(cookieParser());
 
 // Session configuration
 app.use(
