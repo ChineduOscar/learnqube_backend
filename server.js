@@ -43,7 +43,7 @@ app.use(xss());
 app.use(cors(
   {
     origin: 'http://localhost:3000',
-    optionsSuccessStatus: 200
+    optionsSuccessStatus:2,
   }
 ));
 app.use(cookieParser());
