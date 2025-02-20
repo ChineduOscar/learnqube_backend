@@ -47,16 +47,12 @@ const googleCallback = (req, res, next) => {
 
     const token = user.createJWT();
 
-    res.cookie("userToken", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None", 
-    });
-
-    res.cookie("userInfo", JSON.stringify({ name: user.name, role: user.role }), {
-      httpOnly: false,
-      secure: true,
-      sameSite: "None",
+    res.status(StatusCodes.OK).json({
+      user: {
+        name: user.name,
+        role: user.role,
+      },
+      token,
     });
 
     res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
