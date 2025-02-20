@@ -6,12 +6,32 @@ import { BadRequestError, UnauthenticatedError } from '../errors/index.js';
 const register = async (req, res) => {
   const user = await User.create({ ...req.body })
   const token = user.createJWT()
+  
+  // Set JWT cookie
+  res.cookie("userToken", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // true in production
+    sameSite: 'none',
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    path: '/',
+    domain: 'https://learnqubeapi.onrender.com' // if needed for cross-domain
+  });
+
+  // Set user info cookie
+  res.cookie("userInfo", JSON.stringify({ name: user.name, role: user.role }), {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none',
+    maxAge: 24 * 60 * 60 * 1000,
+    path: '/',
+    domain: process.env.COOKIE_DOMAIN
+  });
+
   res.status(StatusCodes.OK).json({
     user: {
       name: user.name,
       role: user.role,
-    },
-    token,
+    }
   });
 }
 
@@ -29,14 +49,34 @@ const login = async (req, res) => {
   if (!isPasswordCorrect) {
     throw new UnauthenticatedError('Invalid Credentials')
   }
-  // compare password
+  
   const token = user.createJWT()
+  
+  // Set JWT cookie
+  res.cookie("userToken", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none',
+    maxAge: 24 * 60 * 60 * 1000,
+    path: '/',
+    domain: 'https://learnqubeapi.onrender.com' 
+  });
+
+  // Set user info cookie
+  res.cookie("userInfo", JSON.stringify({ name: user.name, role: user.role }), {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none',
+    maxAge: 24 * 60 * 60 * 1000,
+    path: '/',
+    domain: 'https://learnqubeapi.onrender.com' 
+  });
+
   res.status(StatusCodes.OK).json({
     user: {
       name: user.name,
       role: user.role,
-    },
-    token,
+    }
   });
 }
 
@@ -47,16 +87,24 @@ const googleCallback = (req, res, next) => {
 
     const token = user.createJWT();
 
-    // Store JWT in a secure, HTTP-only cookie
+    // Set JWT cookie
     res.cookie("userToken", token, {
-      secure: true,
-      sameSite: "None",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
+      domain: 'https://learnqubeapi.onrender.com' 
     });
 
-    // Store user info (name & role) in a normal cookie (accessible in frontend)
+    // Set user info cookie
     res.cookie("userInfo", JSON.stringify({ name: user.name, role: user.role }), {
       httpOnly: false,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
+      domain: process.env.COOKIE_DOMAIN
     });
 
     // Redirect user to frontend dashboard
@@ -64,9 +112,26 @@ const googleCallback = (req, res, next) => {
   })(req, res, next);
 };
 
-
-
 const logout = (req, res) => {
+  // Clear both cookies
+  res.cookie('userToken', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none',
+    maxAge: 0,
+    path: '/',
+    domain: process.env.COOKIE_DOMAIN
+  });
+
+  res.cookie('userInfo', '', {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none',
+    maxAge: 0,
+    path: '/',
+    domain: process.env.COOKIE_DOMAIN
+  });
+
   req.logout();
   res.status(StatusCodes.OK).json({ message: 'User logged out successfully' });
 };
