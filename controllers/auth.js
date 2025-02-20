@@ -49,22 +49,18 @@ const googleCallback = (req, res, next) => {
 
     // Store JWT in a secure, HTTP-only cookie
     res.cookie("userToken", token, {
-      httpOnly: true, // Secure, can't be accessed via JavaScript
       secure: true,
       sameSite: "None",
-      domain: ".onrender.com", 
     });
 
     // Store user info (name & role) in a normal cookie (accessible in frontend)
     res.cookie("userInfo", JSON.stringify({ name: user.name, role: user.role }), {
-      httpOnly: false, // Can be accessed by frontend
+      httpOnly: false,
       secure: true,
-      sameSite: "None",
-      domain: ".onrender.com",
     });
 
     // Redirect user to frontend dashboard
-    res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${token}?name=${user.name}?role=${user.role}`);
+    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   })(req, res, next);
 };
 
