@@ -63,6 +63,8 @@ const googleCallback = (req, res, next) => {
       domain: ".onrender.com",
     });
 
+    // Redirect user to frontend dashboard
+    res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${token}?name=${user.name}?role=${user.role}`);
   })(req, res, next);
 };
 
