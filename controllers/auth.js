@@ -72,8 +72,8 @@ const googleCallback = (req, res, next) => {
     res.cookie("userInfo", JSON.stringify({ name: user.name, role: user.role }), {
       secure: true,
       httpOnly: true,
-      domain: '.onrender.com',
-      sameSite: 'strict'
+      domain: '.learnqubeapi.onrender.com',
+      sameSite: 'none'
     });
 
     res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
