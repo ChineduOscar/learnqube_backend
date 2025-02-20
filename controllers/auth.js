@@ -44,11 +44,7 @@ const login = async (req, res) => {
   
   const token = user.createJWT()
 
-  res.cookie("userToken", token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none'
-  });
+  res.cookie("userToken", token);
 
   // For debugging, also send token in response body
   res.cookie("userInfo", JSON.stringify({ name: user.name, role: user.role }), {
@@ -71,19 +67,13 @@ const googleCallback = (req, res, next) => {
 
     const token = user.createJWT();
 
-    res.cookie("userToken", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none'
-    });
+    res.cookie("userToken", token);
 
-    // For debugging, also send token in response body
     res.cookie("userInfo", JSON.stringify({ name: user.name, role: user.role }), {
       secure: true,
       sameSite: 'none'
     });
 
-    // Redirect user to frontend dashboard
     res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   })(req, res, next);
 };

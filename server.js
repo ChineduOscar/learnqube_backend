@@ -40,7 +40,12 @@ app.use(
 app.use(json());
 app.use(helmet());
 app.use(xss());
-app.use(cors());
+app.use(cors(
+  {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200
+  }
+));
 app.use(cookieParser());
 
 // Session configuration
