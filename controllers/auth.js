@@ -14,7 +14,7 @@ const register = async (req, res) => {
     sameSite: 'none',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     path: '/',
-    domain: 'https://learnqubeapi.onrender.com' // if needed for cross-domain
+    domain: 'learnqubeapi.onrender.com' // if needed for cross-domain
   });
 
   // Set user info cookie
@@ -24,7 +24,7 @@ const register = async (req, res) => {
     sameSite: 'none',
     maxAge: 24 * 60 * 60 * 1000,
     path: '/',
-    domain: 'https://learnqubeapi.onrender.com' 
+    domain: 'learnqubeapi.onrender.com' 
   });
 
   res.status(StatusCodes.OK).json({
@@ -59,7 +59,7 @@ const login = async (req, res) => {
     sameSite: 'none',
     maxAge: 24 * 60 * 60 * 1000,
     path: '/',
-    domain: 'https://learnqubeapi.onrender.com' 
+    domain: 'learnqubeapi.onrender.com' 
   });
 
   // Set user info cookie
@@ -69,7 +69,7 @@ const login = async (req, res) => {
     sameSite: 'none',
     maxAge: 24 * 60 * 60 * 1000,
     path: '/',
-    domain: 'https://learnqubeapi.onrender.com' 
+    domain: 'learnqubeapi.onrender.com' 
   });
 
   res.status(StatusCodes.OK).json({
@@ -94,7 +94,7 @@ const googleCallback = (req, res, next) => {
       sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000,
       path: '/',
-      domain: 'https://learnqubeapi.onrender.com' 
+      domain: 'learnqubeapi.onrender.com' 
     });
 
     // Set user info cookie
@@ -104,7 +104,7 @@ const googleCallback = (req, res, next) => {
       sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000,
       path: '/',
-      domain: 'https://learnqubeapi.onrender.com' 
+      domain: 'learnqubeapi.onrender.com' 
     });
 
     // Redirect user to frontend dashboard
@@ -120,7 +120,7 @@ const logout = (req, res) => {
     sameSite: 'none',
     maxAge: 0,
     path: '/',
-    domain: 'https://learnqubeapi.onrender.com' 
+    domain: 'learnqubeapi.onrender.com' 
   });
 
   res.cookie('userInfo', '', {
@@ -129,7 +129,7 @@ const logout = (req, res) => {
     sameSite: 'none',
     maxAge: 0,
     path: '/',
-    domain: 'https://learnqubeapi.onrender.com' 
+    domain: 'learnqubeapi.onrender.com' 
   });
 
   req.logout();
