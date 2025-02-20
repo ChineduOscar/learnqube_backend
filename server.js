@@ -10,6 +10,7 @@ import rateLimiter from 'express-rate-limit';
 
 // session
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 
 // passport
 import passport from 'passport';
@@ -39,6 +40,8 @@ app.use(
 app.use(json());
 app.use(helmet());
 app.use(xss());
+app.use(cors());
+app.use(cookieParser());
 
 // Session configuration
 app.use(
