@@ -72,7 +72,7 @@ const googleCallback = (req, res, next) => {
     res.cookie("userInfo", JSON.stringify({ name: user.name, role: user.role }), {
       secure: true,
       httpOnly: true,
-      domain: 'learnqubeapi.onrender.com',
+      domain: '.onrender.com',
       sameSite: 'strict'
     });
 
