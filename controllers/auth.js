@@ -44,21 +44,16 @@ const googleCallback = (req, res, next) => {
   passport.authenticate('google', (err, user) => {
     if (err) return next(err);
     if (!user) return res.redirect(`${process.env.FRONTEND_URL}/login`);
-
-    const token = user.createJWT();
-
-    res.status(StatusCodes.OK).json({
-      user: {
-        name: user.name,
-        role: user.role,
-      },
-      token,
+    res.cookie("userToken", token, {
+      httpOnly: true, // Prevents JavaScript access
+      secure: true, // Ensures it's only sent over HTTPS
+      sameSite: "None", // Allows cross-origin requests
+      domain: ".onrender.com", // Adjust based on your domain
     });
 
-    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+    res.redirect(`/protected`);
   })(req, res, next);
 };
-
 
 
 const logout = (req, res) => {
