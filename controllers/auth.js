@@ -95,10 +95,11 @@ const googleCallback = (req, res, next) => {
     const token = user.createJWT();
 
     const tokenCookie = cookie.serialize("userToken", token, {
-      httpOnly: true,  // Secure, not accessible by JavaScript
+      httpOnly: false,
       secure: true,    // Works with HTTPS
       sameSite: "None", // Allows cross-origin requests
-      path: "/",       // Available across all routes
+      path: "/", 
+      domain: "localhost",
     });
 
     // Create readable cookie for user info
@@ -106,10 +107,11 @@ const googleCallback = (req, res, next) => {
       "userInfo",
       JSON.stringify({ name: user.name, role: user.role }),
       {
-        httpOnly: false, // Accessible by JavaScript
+        httpOnly: false,
         secure: true,
         sameSite: "None",
         path: "/",
+        domain: "localhost",
       }
     );
 
