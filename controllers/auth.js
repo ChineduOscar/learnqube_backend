@@ -24,7 +24,7 @@ const register = async (req, res) => {
     sameSite: 'none',
     maxAge: 24 * 60 * 60 * 1000,
     path: '/',
-    domain: process.env.COOKIE_DOMAIN
+    domain: 'https://learnqubeapi.onrender.com' 
   });
 
   res.status(StatusCodes.OK).json({
@@ -104,7 +104,7 @@ const googleCallback = (req, res, next) => {
       sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000,
       path: '/',
-      domain: process.env.COOKIE_DOMAIN
+      domain: 'https://learnqubeapi.onrender.com' 
     });
 
     // Redirect user to frontend dashboard
@@ -120,7 +120,7 @@ const logout = (req, res) => {
     sameSite: 'none',
     maxAge: 0,
     path: '/',
-    domain: process.env.COOKIE_DOMAIN
+    domain: 'https://learnqubeapi.onrender.com' 
   });
 
   res.cookie('userInfo', '', {
@@ -129,7 +129,7 @@ const logout = (req, res) => {
     sameSite: 'none',
     maxAge: 0,
     path: '/',
-    domain: process.env.COOKIE_DOMAIN
+    domain: 'https://learnqubeapi.onrender.com' 
   });
 
   req.logout();
