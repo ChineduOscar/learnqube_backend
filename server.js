@@ -8,9 +8,6 @@ import cors from 'cors';
 import xss from 'xss-clean';
 import rateLimiter from 'express-rate-limit';
 
-// cookies
-import cookieParser from 'cookie-parser'
-
 // session
 import session from 'express-session';
 
@@ -42,13 +39,13 @@ app.use(
 app.use(json());
 app.use(helmet());
 app.use(xss());
-app.use(cookieParser());
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? 'https://learnqube.netlify.app'
-    : 'http://localhost:3000',
-  credentials: true
-}));
+app.use(cors(
+  {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus:2,
+    credentials: true
+  }
+));
 
 // Session configuration
 app.use(

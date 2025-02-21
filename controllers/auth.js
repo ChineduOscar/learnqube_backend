@@ -45,17 +45,6 @@ const googleCallback = (req, res, next) => {
     if (err) return next(err);
     if (!user) return res.redirect(`${process.env.FRONTEND_URL}/login`);
 
-    const token = user.createJWT();
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      domain: process.env.NODE_ENV === 'production' 
-        ? '.yourdomain.com'
-        : 'localhost',
-      maxAge: 24 * 60 * 60 * 1000,
-    });
     
 
     res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
@@ -63,6 +52,7 @@ const googleCallback = (req, res, next) => {
 };
 
 const getCurrentUser = async (req, res) => {
+  console.log('user', req.user)
   const user = req.user;
 
 
