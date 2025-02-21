@@ -64,9 +64,7 @@ const googleCallback = (req, res, next) => {
 
 const getCurrentUser = async (req, res) => {
   const user = req.user;
-  if (!user) {
-    throw new UnauthenticatedError('User not authenticated');
-  }
+
 
   res.status(StatusCodes.OK).json({
     user: {
