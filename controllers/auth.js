@@ -1,37 +1,13 @@
 import User from '../models/User.js';
 import { StatusCodes } from 'http-status-codes';
 import passport from "passport";
-import cookie from 'cookie';
 import { BadRequestError, UnauthenticatedError } from '../errors/index.js';
 
 const register = async (req, res) => {
   const user = await User.create({ ...req.body })
   const token = user.createJWT()
-  
-  const tokenCookie = cookie.serialize("userToken", token, {
-    httpOnly: true,  // Secure, not accessible by JavaScript
-    secure: true,    // Works with HTTPS
-    sameSite: "None", // Allows cross-origin requests
-    path: "/",       // Available across all routes
-  });
 
-  // Create readable cookie for user info
-  const userCookie = cookie.serialize(
-    "userInfo",
-    JSON.stringify({ name: user.name, role: user.role }),
-    {
-      httpOnly: false, // Accessible by JavaScript
-      secure: true,
-      sameSite: "None",
-      path: "/",
-    }
-  );
-
-  // Set cookies in response headers
-  res.setHeader("Set-Cookie", [tokenCookie, userCookie]);
-
-
-  res.status(StatusCodes.OK).json({
+  res.status(StatusCodes.OK).json({ token,
     user: {
       name: user.name,
       role: user.role,
@@ -56,30 +32,7 @@ const login = async (req, res) => {
   
   const token = user.createJWT()
 
-  const tokenCookie = cookie.serialize("userToken", token, {
-    httpOnly: true,  // Secure, not accessible by JavaScript
-    secure: true,    // Works with HTTPS
-    sameSite: "None", // Allows cross-origin requests
-    path: "/",       // Available across all routes
-  });
-
-  // Create readable cookie for user info
-  const userCookie = cookie.serialize(
-    "userInfo",
-    JSON.stringify({ name: user.name, role: user.role }),
-    {
-      httpOnly: false, // Accessible by JavaScript
-      secure: true,
-      sameSite: "None",
-      path: "/",
-    }
-  );
-
-  // Set cookies in response headers
-  res.setHeader("Set-Cookie", [tokenCookie, userCookie]);
-
-
-  res.status(StatusCodes.OK).json({
+  res.status(StatusCodes.OK).json({ token,
     user: {
       name: user.name,
       role: user.role,
@@ -94,33 +47,36 @@ const googleCallback = (req, res, next) => {
 
     const token = user.createJWT();
 
-    const tokenCookie = cookie.serialize("userToken", token, {
-      httpOnly: false,
-      secure: true,    // Works with HTTPS
-      sameSite: "None", // Allows cross-origin requests
-      path: "/", 
-      domain: "localhost",
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      domain: process.env.NODE_ENV === 'production' 
+        ? '.yourdomain.com'
+        : 'localhost',
+      maxAge: 24 * 60 * 60 * 1000,
     });
-
-    // Create readable cookie for user info
-    const userCookie = cookie.serialize(
-      "userInfo",
-      JSON.stringify({ name: user.name, role: user.role }),
-      {
-        httpOnly: false,
-        secure: true,
-        sameSite: "None",
-        path: "/",
-        domain: "localhost",
-      }
-    );
-
-    // Set cookies in response headers
-    res.setHeader("Set-Cookie", [tokenCookie, userCookie]);
+    
 
     res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   })(req, res, next);
 };
+
+const getCurrentUser = async (req, res) => {
+  const user = req.user;
+  if (!user) {
+    throw new UnauthenticatedError('User not authenticated');
+  }
+
+  res.status(StatusCodes.OK).json({
+    user: {
+      name: user.name,
+      role: user.role,
+      email: user.email,
+    }
+  });
+};
+
 
 const logout = (req, res) => {
   req.logout();
