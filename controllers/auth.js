@@ -88,4 +88,5 @@ export {
   login,
   googleCallback,
   logout,
+  getCurrentUser
 }

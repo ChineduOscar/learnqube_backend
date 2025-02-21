@@ -44,7 +44,7 @@ app.use(helmet());
 app.use(xss());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'production' === 'production' 
+  origin: process.env.NODE_ENV === 'production' 
     ? 'https://learnqube.netlify.app'
     : 'http://localhost:3000',
   credentials: true
