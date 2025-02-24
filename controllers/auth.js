@@ -44,9 +44,11 @@ const googleCallback = (req, res, next) => {
   passport.authenticate('google', (err, user) => {
     if (err) return next(err);
     if (!user) return res.redirect(`${process.env.FRONTEND_URL}/login`);
-    const token = user.createJWT()
-
-    res.redirect(`${process.env.FRONTEND_URL}//dashboard?token=${token}`);
+    const token = user.createJWT();
+    
+    const encodedToken = encodeURIComponent(token);
+    const redirectUrl = `${process.env.FRONTEND_URL}/dashboard?token=${encodedToken}`;
+    res.redirect(redirectUrl);
   })(req, res, next);
 };
 
