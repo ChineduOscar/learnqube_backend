@@ -46,7 +46,7 @@ const googleCallback = (req, res, next) => {
     if (!user) return res.redirect(`${process.env.FRONTEND_URL}/login`);
     const token = user.createJWT()
 
-    res.cookies('token', token)
+    res.cookie('token', token)
     
 
     res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
