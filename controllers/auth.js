@@ -44,7 +44,9 @@ const googleCallback = (req, res, next) => {
   passport.authenticate('google', (err, user) => {
     if (err) return next(err);
     if (!user) return res.redirect(`${process.env.FRONTEND_URL}/login`);
+    const token = user.createJWT()
 
+    res.cookies('token', token)
     
 
     res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
