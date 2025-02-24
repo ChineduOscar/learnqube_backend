@@ -47,7 +47,10 @@ const googleCallback = (req, res, next) => {
     const token = user.createJWT();
     
     const encodedToken = encodeURIComponent(token);
-    const redirectUrl = `${process.env.FRONTEND_URL}/dashboard?token=${encodedToken}`;
+    const encodedName = encodeURIComponent(user?.name);
+    const encodedRole = encodeURIComponent(user?.role);
+
+    const redirectUrl = `${process.env.FRONTEND_URL}/dashboard?token=${encodedToken}&name=${encodedName}&role=${encodedRole}`;
     res.redirect(redirectUrl);
   })(req, res, next);
 };
