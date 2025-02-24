@@ -46,20 +46,8 @@ const googleCallback = (req, res, next) => {
     if (!user) return res.redirect(`${process.env.FRONTEND_URL}/login`);
     const token = user.createJWT()
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-    });
-    
-
-    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+    res.redirect(`${process.env.FRONTEND_URL}//dashboard?token=${token}`);
   })(req, res, next);
-};
-
-const getUserToken = (req, res) => {
-    const token = req.cookies.token;
-    res.json({ token });
 };
 
 
@@ -73,5 +61,4 @@ export {
   login,
   googleCallback,
   logout,
-  getUserToken
 }
