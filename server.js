@@ -40,10 +40,10 @@ app.use(json());
 app.use(helmet());
 app.use(xss());
 app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
+  origin: ["http://localhost:3000", "https://learnqube.netlify.app"],  
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],  
+  allowedHeaders: ["Content-Type", "Authorization"],  
+  credentials: true,  
 }));
 
 // Session configuration
