@@ -10,6 +10,7 @@ const register = async (req, res) => {
   res.status(StatusCodes.OK).json({ token,
     user: {
       name: user.name,
+      email:user.email,
       role: user.role,
     }
   });
@@ -35,6 +36,7 @@ const login = async (req, res) => {
   res.status(StatusCodes.OK).json({ token,
     user: {
       name: user.name,
+      email:user.email,
       role: user.role,
     }
   });
@@ -49,9 +51,10 @@ const googleCallback = (req, res, next) => {
     
     const encodedToken = encodeURIComponent(token);
     const encodedName = encodeURIComponent(user.name);
+    const encodedEmail = encodeURIComponent(user.email);
     const encodedRole = encodeURIComponent(user.role);
-
-    const redirectUrl = `${process.env.FRONTEND_URL}/dashboard?token=${encodedToken}&name=${encodedName}&role=${encodedRole}`;
+    
+    const redirectUrl = `${process.env.FRONTEND_URL}/dashboard?token=${encodedToken}&name=${encodedName}&email=${encodedEmail}&role=${encodedRole}`;
     res.redirect(redirectUrl);
   })(req, res, next);
 };

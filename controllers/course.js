@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { NotFoundError } from '../errors/index.js';
 
 // Get All courses
-const getAllCourses = async (res, req) => {
+const getAllCourses = async (req, res) => {
   const courses = await Course.find()
     .populate('category')
     .populate('subCategories');
@@ -11,7 +11,7 @@ const getAllCourses = async (res, req) => {
 }
 
 // Get single course
-const getSingleCourse = async (res, req) => {
+const getSingleCourse = async (req, res) => {
   const {
     params: { id: courseId },
   } = req;
