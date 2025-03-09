@@ -26,7 +26,7 @@ import errorHandlerMiddleware from './middleware/error-handler.js';
 //routes
 import authRouter from './routes/auth.js';
 import pricingRouter from './routes/pricing.js';
-import PaymentRouter from './routes/monify.js';
+import PaymentRouter from './routes/payment.js';
 import coursesRouter from './routes/course.js'
 
 app.set('trust proxy', 1);
