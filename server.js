@@ -18,6 +18,10 @@ import './config/passport.js'
 import express, { json } from 'express';
 const app = express();
 
+/// Swagger
+import swaggerUI from 'swagger-ui-express';
+import YAML from 'yamljs';
+const swaggerDocument = YAML.load('./swagger.yaml');
 // database
 import connectDB from './db/connect.js';
 // error handler
@@ -25,7 +29,6 @@ import notFoundMiddleware from './middleware/not-found.js';
 import errorHandlerMiddleware from './middleware/error-handler.js';
 //routes
 import authRouter from './routes/auth.js';
-import pricingRouter from './routes/pricing.js';
 import PaymentRouter from './routes/payment.js';
 import coursesRouter from './routes/course.js'
 
@@ -62,13 +65,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/pricing', pricingRouter);
 app.use('/api/v1/pay', PaymentRouter);
 app.use('/api/v1/courses', coursesRouter);
 
-app.get('/', (req, res) => {
-  res.send(`<a href="/api/v1/auth/google/callback">Login with Google</a>`);
-});
+app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument, {  
+  customSiteTitle: 'Learnqube API Docs'  
+}));
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

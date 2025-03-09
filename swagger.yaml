@@ -1,0 +1,215 @@
+openapi: 3.0.0
+info:
+  title: Learnqube API
+  description: API documentation for Learnqube Blog
+  version: '1.0'
+servers:
+  - url: https://learnqubeapi.onrender.com/api/v1
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register User
+      operationId: RegisterUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserRequest'
+            example:
+              name: bob
+              email: bob@gmail.com
+              password: secret
+      responses:
+        '201':
+          description: Successfully registered user
+      security: []
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login User
+      operationId: LoginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+            example:
+              email: bob@gmail.com
+              password: secret
+      responses:
+        '200':
+          description: Successfully logged in
+      security: []
+
+  /courses:
+    get:
+      tags:
+        - Courses
+      summary: Get All Courses
+      operationId: GetAllCourses
+      responses:
+        '200':
+          description: List of all available courses
+
+  /courses/enrolled:
+    get:
+      tags:
+        - Courses
+      summary: Get Enrolled Courses
+      operationId: GetEnrolledCourses
+      security:
+        - httpBearer: []
+      parameters:
+        - in: header
+          name: Authorization
+          description: "Bearer token authentication (format: 'Bearer {token}')"
+          required: true
+          schema:
+            type: string
+            example: "Bearer your-jwt-token-here"
+      responses:
+        '200':
+          description: List of enrolled courses
+        '401':
+          description: Unauthorized - Invalid or missing token
+
+  /courses/{id}:
+    get:
+      tags:
+        - Courses
+      summary: Get Single Course
+      operationId: GetSingleCourse
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The course ID
+      responses:
+        '200':
+          description: Course details retrieved successfully
+        '404':
+          description: Course not found
+
+  /pay:
+    post:
+      tags:
+        - Payment
+      summary: Create Payment
+      operationId: CreatePayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - amount
+                - courseId
+              properties:
+                email:
+                  type: string
+                  example: john.doe@example.com
+                amount:
+                  type: number
+                  example: 200
+                courseId:
+                  type: string
+                  example: "65ee8a9f5d4b3c2a1f7e6d5c"
+      responses:
+        '201':
+          description: Payment created successfully
+        '400':
+          description: Bad request - Invalid payment details
+
+  /pay/hook/{reference}:
+    get:
+      tags:
+        - Payment
+      summary: Verify Payment
+      operationId: VerifyPayment
+      parameters:
+        - name: reference
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment verified
+        '404':
+          description: Payment reference not found
+
+components:
+  schemas:
+    RegisterUserRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+
+    LoginUserRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    CreateContactRequest:
+      type: object
+      required:
+        - name
+        - email
+        - phone
+        - message
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        message:
+          type: string
+      example:
+        name: Johndoe
+        email: Johndoe@gmail.com
+        phone: "+1234567890"
+        message: I have a question about your services.
+
+  securitySchemes:
+    httpBearer:
+      type: http
+      scheme: bearer
+
+security:
+  - httpBearer: []
+
+tags:
+  - name: Auth
+    description: Authentication endpoints
+  - name: Courses
+    description: Course management
+  - name: Payment
+    description: Payment processing
